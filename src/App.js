@@ -8,7 +8,6 @@ import GridItem from "./Components/GridItem";
 
 export default function App(props) {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-	const [weatherData, setWeatherData] = useState("");
 
 	const theme = React.useMemo(
 		() =>
@@ -40,10 +39,10 @@ export default function App(props) {
 		[prefersDarkMode]
 	);
 
+	const [weatherData, setWeatherData] = useState([]);
+
 	const saveWeatherDataHandler = (receivedWeatherData) => {
-		setWeatherData((prevExpenses) => {
-			return [receivedWeatherData, ...prevExpenses];
-		});
+		setWeatherData(receivedWeatherData);
 	};
 
 	return (
@@ -55,13 +54,16 @@ export default function App(props) {
 				</Typography>
 				<SearchBar onSaveWeatherData={saveWeatherDataHandler} />
 				<Grid container spacing={2} columns={7} sx={{ mt: 5 }}>
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
-					<GridItem data={weatherData} />
+					{weatherData.map((data, index) => (
+						<GridItem
+							key={index}
+							Date={data.Date}
+							Day={data.Day}
+							Windspeed={data.Windspeed}
+							AirTemperature={data.AirTemperature}
+							Precipitation={data.Precipitation}
+						/>
+					))}
 				</Grid>
 			</Container>
 		</ThemeProvider>

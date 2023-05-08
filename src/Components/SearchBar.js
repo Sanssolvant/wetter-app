@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { TextField, Box, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Geocode from "react-geocode";
+const dotenv = require("dotenv");
+dotenv.config();
 
-Geocode.setApiKey("AIzaSyD7J_ZfGFqxcyrUxoILxSULQHKWZMKjj-o");
+Geocode.setApiKey("process.env.GOOGLEKEY");
 
 export default function SearchBar(props) {
 	const [location, setLocation] = useState("");
@@ -30,8 +32,7 @@ export default function SearchBar(props) {
 					`https://api.stormglass.io/v2/weather/point?lat=${coords.lat}&lng=${coords.lng}&params=windSpeed,airTemperature,precipitation`,
 					{
 						headers: {
-							Authorization:
-								"14029144-ec47-11ed-92e6-0242ac130002-140291da-ec47-11ed-92e6-0242ac130002",
+							Authorization: "process.env.STORMGLASSKEY",
 						},
 					}
 				)
@@ -54,12 +55,15 @@ export default function SearchBar(props) {
 							dateObj = new Date(data.meta.start); //create a Date object from the string
 							dateObj.setDate(dateObj.getDate() + i); //add one day to the date
 							let newDateString = dateObj.toISOString().slice(0, 10); //get the resulting date string without the time component
+							const options = { weekday: "long" };
+							const dayOfWeek = new Intl.DateTimeFormat("en-US", options).format(dateObj);
 
 							let dayObject = {
-								Day: newDateString,
-								Windspeed: sumWindspeed / 24,
-								AirTemperature: sumAirTemperature / 24,
-								Precipitation: sumPrecipitation / 24,
+								Date: newDateString,
+								Day: dayOfWeek,
+								Windspeed: Math.round((sumWindspeed / 24) * 3.6),
+								AirTemperature: Math.round(sumAirTemperature / 24),
+								Precipitation: Math.round(sumPrecipitation / 24),
 							};
 							weatherData.push(dayObject);
 							start += 24;
