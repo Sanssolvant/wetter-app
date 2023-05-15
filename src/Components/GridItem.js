@@ -1,5 +1,8 @@
 import { Grid } from "@mui/material";
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import AirIcon from "@mui/icons-material/Air";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
 
 export default function GridItem(props) {
 	return (
@@ -12,35 +15,50 @@ export default function GridItem(props) {
 								{props.Day}
 							</Typography>
 						</Box>
-						<Box sx={{ textAlign: "center" }}>
-							<Typography
-								variant="p"
-								sx={{ textAlign: "center", color: "primary.main", mt: 10, mb: 5 }}
-							>
+						<Box
+							sx={{
+								textAlign: "center",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "space-between",
+								width: "100%",
+							}}
+						>
+							<AirIcon sx={{ color: "primary.main", mr: 1, my: 0.5 }} />
+							<Typography variant="p" sx={{ textAlign: "center", color: "primary.main" }}>
 								{props.Windspeed} km/h
 							</Typography>
 						</Box>
-						<Box sx={{ textAlign: "center" }}>
-							<Typography
-								variant="p"
-								sx={{ textAlign: "center", color: "primary.main", mt: 10, mb: 5 }}
-							>
+						<Box
+							sx={{
+								textAlign: "center",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "space-between",
+								width: "100%",
+							}}
+						>
+							<ThermostatIcon sx={{ color: "primary.main", mr: 1, my: 0.5 }} />
+							<Typography variant="p" sx={{ textAlign: "center", color: "primary.main" }}>
 								{props.AirTemperature} °C
 							</Typography>
 						</Box>
-						<Box sx={{ textAlign: "center" }}>
-							<Typography
-								variant="p"
-								sx={{ textAlign: "center", color: "primary.main", mt: 10, mb: 5 }}
-							>
+						<Box
+							sx={{
+								textAlign: "center",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "space-between",
+								width: "100%",
+							}}
+						>
+							<WaterDropIcon sx={{ color: "primary.main", mr: 1, my: 0.5 }} />
+							<Typography variant="p" sx={{ textAlign: "center", color: "primary.main" }}>
 								{props.Precipitation} mm/h
 							</Typography>
 						</Box>
 						<Box sx={{ textAlign: "center", backgroundColor: "gray" }}>
-							<Typography
-								variant="p"
-								sx={{ textAlign: "center", color: "primary.main", mt: 10, mb: 5 }}
-							>
+							<Typography variant="p" sx={{ textAlign: "center", color: "primary.main" }}>
 								{props.Date}
 							</Typography>
 						</Box>

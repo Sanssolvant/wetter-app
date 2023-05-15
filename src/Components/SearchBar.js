@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { TextField, Box, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Geocode from "react-geocode";
-const dotenv = require("dotenv");
-dotenv.config();
 
-Geocode.setApiKey("process.env.GOOGLEKEY");
+Geocode.setApiKey(process.env.REACT_APP_GOOGLEKEY);
 
 export default function SearchBar(props) {
 	const [location, setLocation] = useState("");
@@ -29,15 +27,16 @@ export default function SearchBar(props) {
 			)
 			.then((coords) => {
 				return fetch(
-					`https://api.stormglass.io/v2/weather/point?lat=${coords.lat}&lng=${coords.lng}&params=windSpeed,airTemperature,precipitation`,
+					`https://api.stormglass.io/v2/weather/point?lat=${coords.lat}&lng=${coords.lng}&params=windSpeed,airTemperature1000hpa,precipitation`,
 					{
 						headers: {
-							Authorization: "process.env.STORMGLASSKEY",
+							Authorization: process.env.REACT_APP_STORMGLASSKEY,
 						},
 					}
 				)
 					.then((response) => response.json())
 					.then((data) => {
+						console.log(data);
 						const weatherData = [];
 						let dateObj;
 						let start = 0;
@@ -49,17 +48,22 @@ export default function SearchBar(props) {
 							for (let index = 0; index < 24; index++) {
 								increment = start + index;
 								sumWindspeed += data.hours[increment].windSpeed.sg;
-								sumAirTemperature += data.hours[increment].airTemperature.sg;
+								sumAirTemperature += data.hours[increment].airTemperature1000hpa.sg;
 								sumPrecipitation += data.hours[increment].precipitation.sg;
 							}
 							dateObj = new Date(data.meta.start); //create a Date object from the string
 							dateObj.setDate(dateObj.getDate() + i); //add one day to the date
-							let newDateString = dateObj.toISOString().slice(0, 10); //get the resulting date string without the time component
+
+							const day = String(dateObj.getDate()).padStart(2, "0");
+							const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+							const year = dateObj.getFullYear();
+							const formattedDate = `${day}.${month}.${year}`;
+
 							const options = { weekday: "long" };
 							const dayOfWeek = new Intl.DateTimeFormat("en-US", options).format(dateObj);
 
 							let dayObject = {
-								Date: newDateString,
+								Date: formattedDate,
 								Day: dayOfWeek,
 								Windspeed: Math.round((sumWindspeed / 24) * 3.6),
 								AirTemperature: Math.round(sumAirTemperature / 24),
